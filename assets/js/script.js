@@ -1,4 +1,5 @@
-var searchBar = document.querySelector('#searchBar');
+var searchBar = document.querySelector('#searchCity');
+var submitBtn = document.querySelector('.btn');
 var currentWeatherEl = document.querySelector('#currentWeather');
 var forecastEl = document.querySelector('#forecast');
 
@@ -28,19 +29,12 @@ var icon;
 var temp;
 var humidity;
 var wind;
-var forecastDate;
-var forecastIcon;
-var forecastTemp;
-var forecastHumidity;
-var forecastWind;
+var city;
 
 var setCoord = function (info){
     lat = info[0].lat;
     lon = info[0].lon
 }
-
-
-getCoord('San Diego');
 
 var getCityInfo = function(y, x){
     var apiUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + y + '&lon=' + x + '&appid=ec7a75b859f25b487d5d65395cbdeff9&units=imperial';
@@ -48,9 +42,10 @@ var getCityInfo = function(y, x){
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-          setWeather(data.list);
-          displayWeather();
-          }
+            city = data.city.name;
+            setWeather(data.list);
+            displayWeather();
+        }
         );
       } else {
         alert('Error: ' + response.statusText);
@@ -80,7 +75,7 @@ var displayWeather = function (){
         class: 'heading',
     })
     );
-    $('.heading').text('San Diego'+ ' (' + date + ') ');
+    $('.heading').text(city+ ' (' + date + ') ');
     $(`<img src='${icon}'>`).appendTo('.heading');
 
     $("#currentWeather").append(
@@ -104,6 +99,12 @@ var displayWeather = function (){
     );
     $('.currentWind').text('Wind Speed: ' + wind + ' MPH');
 }
+
+var forecastDate;
+var forecastIcon;
+var forecastTemp;
+var forecastHumidity;
+var forecastWind;
 
 var displayForecast = function (){
     var dateEl = document.createElement('p');
@@ -162,3 +163,11 @@ var getForecast = function(y, x){
       alert('Unable to connect to Weathermap');
     });
 };
+
+//getCoord("San Diego");
+
+submitBtn.addEventListener('click', function(event){
+    event.preventDefault();
+    var input = $('#searchCity').val();
+    getCoord(input);
+});
