@@ -55,7 +55,11 @@ var getCityInfo = function(y, x){
 };
 
 var setWeather = function(info){
-    date = info[0].dt_txt;
+    var dateTimeString = info[0].dt_txt;
+    var dateString = dateTimeString.split(' ')[0];
+    var year = dateString.split('-')[0];
+    var dateNoYear = dateString.split('-').slice(1).join('/');
+    date = dateNoYear + "/" + year;
     var iconNum = info[0].weather[0].icon;
     icon = "https://openweathermap.org/img/wn/" + iconNum + "@2x.png";
     temp = info[0].main.temp;
@@ -69,7 +73,7 @@ var displayWeather = function (){
         class: 'heading',
     })
     );
-    $('.heading').text('San Diego'+date);
+    $('.heading').text('San Diego'+ ' (' + date + ') ');
     $(`<img src='${icon}'>`).appendTo('.heading');
 
     $("#currentWeather").append(
