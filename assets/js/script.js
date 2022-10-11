@@ -10,6 +10,7 @@ var getCoord = function(city){
         response.json().then(function (data) {
           setCoord(data);
           getCityInfo(lat, lon);
+          getForecast(lat,lon);
         });
       } else {
         alert('Error: ' + response.statusText);
@@ -27,6 +28,11 @@ var icon;
 var temp;
 var humidity;
 var wind;
+var forecastDate;
+var forecastIcon;
+var forecastTemp;
+var forecastHumidity;
+var forecastWind;
 
 var setCoord = function (info){
     lat = info[0].lat;
@@ -44,7 +50,8 @@ var getCityInfo = function(y, x){
         response.json().then(function (data) {
           setWeather(data.list);
           displayWeather();
-        });
+          }
+        );
       } else {
         alert('Error: ' + response.statusText);
       }
@@ -69,7 +76,7 @@ var setWeather = function(info){
 
 var displayWeather = function (){
     $("#currentWeather").append(
-        $(document.createElement('p')).attr({
+        $(document.createElement('h1')).attr({
         class: 'heading',
     })
     );
@@ -97,3 +104,61 @@ var displayWeather = function (){
     );
     $('.currentWind').text('Wind Speed: ' + wind + ' MPH');
 }
+
+var displayForecast = function (){
+    var dateEl = document.createElement('p');
+    dateEl.textContent = forecastDate;
+    forecastEl.appendChild(dateEl);
+
+    var iconEl = document.createElement('img');
+    iconEl.src = forecastIcon;
+    iconEl.style = "float-right";
+    dateEl.appendChild(iconEl);
+
+    var tempEl = document.createElement('p');
+    tempEl.textContent = 'Temp: ' + forecastTemp+ '°F';
+    forecastEl.appendChild(tempEl);
+
+    var humidityEl = document.createElement('p');
+    humidityEl.textContent = 'Humidity: ' + forecastHumidity + '%';
+    forecastEl.appendChild(humidityEl);
+
+    var windEl = document.createElement('p');
+    windEl.textContent = 'Wind Speed: ' + forecastWind + ' MPH';
+    forecastEl.appendChild(windEl);
+}
+
+var getForecast = function(y, x){
+    var apiUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + y + '&lon=' + x + '&appid=ec7a75b859f25b487d5d65395cbdeff9&units=imperial';
+    fetch(apiUrl)
+    .then(function (response) {
+      if (response.ok) {
+        response.json().then(function (data) {
+            for(var i = 0; i<5; i++){
+            var indexArr = [7, 15, 23, 31, 39];
+            var index = indexArr[i];
+
+                var dateTimeString = data.list[index].dt_txt;
+                var dateString = dateTimeString.split(' ')[0];
+                var year = dateString.split('-')[0];
+                var dateNoYear = dateString.split('-').slice(1).join('/');
+                forecastDate = dateNoYear + "/" + year;
+                var iconNum = data.list[index].weather[0].icon;
+                forecastIcon = "https://openweathermap.org/img/wn/" + iconNum + "@2x.png";
+                forecastTemp = data.list[index].main.temp;
+                forecastHumidity = data.list[index].main.humidity;
+                forecastWind = data.list[index].wind.speed;
+            
+            displayForecast();
+           
+            };
+        }
+        );
+      } else {
+        alert('Error: ' + response.statusText);
+      }
+    })
+    .catch(function (error) {
+      alert('Unable to connect to Weathermap');
+    });
+};
