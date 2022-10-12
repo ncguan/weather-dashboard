@@ -221,12 +221,6 @@ var displaySearches = function (){
             value: input,
         })
     );
-    $('.savedBtn').on('click', function () {
-        var index = $('.savedBtn').index(this);
-        var input = $('.savedBtn');
-        var value = input.eq(index).val();
-        getCoord(value);
-    });
 }
 
 //retrieve stored previous searches and append the buttons on the page; when button is clicked, weather of the search is displayed
