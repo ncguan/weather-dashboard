@@ -9,9 +9,24 @@ var getCoord = function(city){
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-          setCoord(data);
-          getCityInfo(lat, lon);
-          getForecast(lat,lon);
+            if(pageFilled==false){
+            setCoord(data);
+            getCityInfo(lat, lon);
+            getForecast(lat,lon);
+            pageFilled=true;
+            }
+            else{
+            while(currentWeatherEl.firstChild){
+                currentWeatherEl.removeChild(currentWeatherEl.firstChild);
+            }
+            while(forecastEl.firstChild){
+            forecastEl.removeChild(forecastEl.firstChild);
+            }
+            setCoord(data);
+            getCityInfo(lat, lon);
+            getForecast(lat,lon);
+            pageFilled=true;
+            }
         });
       } else {
         alert('Error: ' + response.statusText);
@@ -30,6 +45,7 @@ var temp;
 var humidity;
 var wind;
 var city;
+var pageFilled=false;
 
 var setCoord = function (info){
     lat = info[0].lat;
@@ -163,8 +179,6 @@ var getForecast = function(y, x){
       alert('Unable to connect to Weathermap');
     });
 };
-
-//getCoord("San Diego");
 
 submitBtn.addEventListener('click', function(event){
     event.preventDefault();
