@@ -1,4 +1,4 @@
-var searchBar = document.querySelector('#searchCity');
+var searchBar = document.querySelector('#searchBar');
 var submitBtn = document.querySelector('.btn');
 var currentWeatherEl = document.querySelector('#currentWeather');
 var forecastEl = document.querySelector('#forecast');
@@ -9,15 +9,8 @@ var getCoord = function(city){
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-            if(pageFilled==false){
-            setCoord(data);
-            getCityInfo(lat, lon);
-            getForecast(lat,lon);
-            pageFilled=true;
-            }
-            else{
             while(currentWeatherEl.firstChild){
-                currentWeatherEl.removeChild(currentWeatherEl.firstChild);
+            currentWeatherEl.removeChild(currentWeatherEl.firstChild);
             }
             while(forecastEl.firstChild){
             forecastEl.removeChild(forecastEl.firstChild);
@@ -26,7 +19,7 @@ var getCoord = function(city){
             getCityInfo(lat, lon);
             getForecast(lat,lon);
             pageFilled=true;
-            }
+
         });
       } else {
         alert('Error: ' + response.statusText);
@@ -45,7 +38,6 @@ var temp;
 var humidity;
 var wind;
 var city;
-var pageFilled=false;
 
 var setCoord = function (info){
     lat = info[0].lat;
@@ -180,8 +172,55 @@ var getForecast = function(y, x){
     });
 };
 
+var searches = [];
+
 submitBtn.addEventListener('click', function(event){
     event.preventDefault();
     var input = $('#searchCity').val();
     getCoord(input);
+    displaySearches();
+    var value = input;
+    searches.push(value);
+    storeSearches();
 });
+/*saveBtn.addEventListener('click', function(event){
+    event.preventDefault();
+    var input = $('#searchCity').val();
+    getCoord(input);
+    displaySearches();
+});*/
+
+
+
+var displaySearches = function (){
+    var input = $('#searchCity').val();
+    $('#searchBar').append(
+        $(document.createElement('input')).attr({
+            type: 'button',
+            class: 'savedBtn',
+            value: input,
+        })
+    );
+}
+
+function renderSearches(){
+    var storedSearches = JSON.parse(localStorage.getItem("searches"));
+    if(storedSearches !== null){
+        searches = storedSearches;
+    }
+    for (var i = 0; i < storedSearches.length; i++) {
+        $('#searchBar').append(
+            $(document.createElement('input')).attr({
+                type: 'button',
+                class: 'savedBtn',
+                value: storedSearches[i],
+            })
+        );
+    }
+}
+
+function storeSearches(){
+    localStorage.setItem("searches", JSON.stringify(searches));
+}
+var storedSearches = JSON.parse(localStorage.getItem("searches"));
+renderSearches();
