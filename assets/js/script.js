@@ -183,12 +183,6 @@ submitBtn.addEventListener('click', function(event){
     searches.push(value);
     storeSearches();
 });
-/*saveBtn.addEventListener('click', function(event){
-    event.preventDefault();
-    var input = $('#searchCity').val();
-    getCoord(input);
-    displaySearches();
-});*/
 
 
 
@@ -207,20 +201,28 @@ function renderSearches(){
     var storedSearches = JSON.parse(localStorage.getItem("searches"));
     if(storedSearches !== null){
         searches = storedSearches;
-    }
-    for (var i = 0; i < storedSearches.length; i++) {
-        $('#searchBar').append(
-            $(document.createElement('input')).attr({
-                type: 'button',
-                class: 'savedBtn',
-                value: storedSearches[i],
-            })
-        );
+        for (var i = 0; i < storedSearches.length; i++) {
+            $('#searchBar').append(
+                $(document.createElement('input')).attr({
+                    type: 'button',
+                    class: 'savedBtn',
+                    value: storedSearches[i],
+                })
+            );
+        }
+        $('.savedBtn').on('click', function () {
+            var index = $('.savedBtn').index(this);
+            var input = $('.savedBtn');
+            var value = input.eq(index).val();
+            getCoord(value);
+        });
     }
 }
+
+
 
 function storeSearches(){
     localStorage.setItem("searches", JSON.stringify(searches));
 }
-var storedSearches = JSON.parse(localStorage.getItem("searches"));
+
 renderSearches();
