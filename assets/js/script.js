@@ -3,6 +3,7 @@ var submitBtn = document.querySelector('.btn');
 var currentWeatherEl = document.querySelector('#currentWeather');
 var forecastEl = document.querySelector('#forecast');
 
+//take city input and retrieves coordinates for api, currect weather, and 5 day forecast weather
 var getCoord = function(city){
     var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + '&appid=ec7a75b859f25b487d5d65395cbdeff9';
     fetch(apiUrl)
@@ -31,6 +32,7 @@ var getCoord = function(city){
     });
 };
 
+//heading for 5 day forecast
 var forecastHeading = function(){
     var h2El = document.createElement('h2');
     h2El.textContent = "5 Day Forecast:";
@@ -47,11 +49,13 @@ var humidity;
 var wind;
 var city;
 
+//gets data from api and retreives lat and lon
 var setCoord = function (info){
     lat = info[0].lat;
     lon = info[0].lon
 }
 
+//retrieves weather info from api using coordinates
 var getCityInfo = function(y, x){
     var apiUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + y + '&lon=' + x + '&appid=ec7a75b859f25b487d5d65395cbdeff9&units=imperial';
     fetch(apiUrl)
@@ -72,6 +76,7 @@ var getCityInfo = function(y, x){
     });
 };
 
+//formating for how the data is displayed
 var setWeather = function(info){
     var dateTimeString = info[0].dt_txt;
     var dateString = dateTimeString.split(' ')[0];
@@ -85,6 +90,7 @@ var setWeather = function(info){
     wind = info[0].wind.speed;
 }
 
+//append elements on page with current weather data retrieved from api
 var displayWeather = function (){
     $("#currentWeather").append(
         $(document.createElement('h2')).attr({
@@ -122,6 +128,7 @@ var forecastTemp;
 var forecastHumidity;
 var forecastWind;
 
+//append elements on page with 5 day forcast data retreived from api
 var displayForecast = function (){
     var cardEl = document.createElement('div');
     cardEl.classList.add("card");
@@ -154,6 +161,7 @@ var displayForecast = function (){
     cardEl.appendChild(windEl);
 }
 
+//retrieve data for each day of 5 day forecast and format when displayed
 var getForecast = function(y, x){
     var apiUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + y + '&lon=' + x + '&appid=ec7a75b859f25b487d5d65395cbdeff9&units=imperial';
     fetch(apiUrl)
@@ -191,6 +199,7 @@ var getForecast = function(y, x){
 
 var searches = [];
 
+//retrieve and display current and forecast weather when search button is clicked
 submitBtn.addEventListener('click', function(event){
     event.preventDefault();
     var input = $('#searchCity').val();
@@ -202,7 +211,7 @@ submitBtn.addEventListener('click', function(event){
 });
 
 
-
+//append buttons of previous searches on page
 var displaySearches = function (){
     var input = $('#searchCity').val();
     $('#searchBar').append(
@@ -212,8 +221,15 @@ var displaySearches = function (){
             value: input,
         })
     );
+    $('.savedBtn').on('click', function () {
+        var index = $('.savedBtn').index(this);
+        var input = $('.savedBtn');
+        var value = input.eq(index).val();
+        getCoord(value);
+    });
 }
 
+//retrieve stored previous searches and append the buttons on the page; when button is clicked, weather of the search is displayed
 function renderSearches(){
     var storedSearches = JSON.parse(localStorage.getItem("searches"));
     if(storedSearches !== null){
@@ -235,8 +251,6 @@ function renderSearches(){
         });
     }
 }
-
-
 
 function storeSearches(){
     localStorage.setItem("searches", JSON.stringify(searches));
