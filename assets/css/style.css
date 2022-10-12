@@ -1,0 +1,23 @@
+h1{
+    background-color:darkblue;
+    color: aliceblue;
+    margin: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.card{
+    border-color: darkblue;
+}
+
+.custom-btn-color{
+    background-color: darkblue;
+    color: aliceblue;
+}
+
+.savedBtn{
+    background-color: aliceblue;
+    color: darkblue;
+    border-color: darkblue;
+    margin: 1px;
+}

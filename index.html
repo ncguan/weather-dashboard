@@ -18,21 +18,22 @@
         <h1>Weather Dashboard</h1>
     </header>
 
-    <main class="row">
-        <form id="searchBar" class="col-lg-4">
+    <main class="row m-1">
+        <form id="searchBar" class="col-4">
             <div class = "form-group">
-            <label  for="searchCity">Search for a city:</label>
+            <h2>Search for a city:</h2>
             <input id="searchCity" class="form-control" type="text" placeholder="San Diego" />
             </div>
-            <button type="submit" class="btn btn-primary col-lg-12">Search</button>
+            <button type="submit" class="btn col-lg-12 custom-btn-color">Search</button>
+            <hr>
         </form>
 
-        <section id="weather" class="col-lg-8">
+        <section id="weather" class="col-8">
             <!--Current Weather-->
             <article id="currentWeather"></article>
     
             <!--5 Day Forecast-->
-            <article id="forecast"></article>
+            <article id="forecast" class="row"></article>
         </section>
 
     </main>

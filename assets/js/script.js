@@ -17,6 +17,7 @@ var getCoord = function(city){
             }
             setCoord(data);
             getCityInfo(lat, lon);
+            forecastHeading();
             getForecast(lat,lon);
             pageFilled=true;
 
@@ -29,6 +30,13 @@ var getCoord = function(city){
       alert('Unable to connect to Weathermap');
     });
 };
+
+var forecastHeading = function(){
+    var h2El = document.createElement('h2');
+    h2El.textContent = "5 Day Forecast:";
+    h2El.classList.add("col-12");
+    forecastEl.appendChild(h2El);
+}
 
 var lat;
 var lon;
@@ -79,7 +87,7 @@ var setWeather = function(info){
 
 var displayWeather = function (){
     $("#currentWeather").append(
-        $(document.createElement('h1')).attr({
+        $(document.createElement('h2')).attr({
         class: 'heading',
     })
     );
@@ -115,9 +123,15 @@ var forecastHumidity;
 var forecastWind;
 
 var displayForecast = function (){
+    var cardEl = document.createElement('div');
+    cardEl.classList.add("card");
+    cardEl.classList.add("col-2");
+    forecastEl.appendChild(cardEl);
+
     var dateEl = document.createElement('p');
     dateEl.textContent = forecastDate;
-    forecastEl.appendChild(dateEl);
+    dateEl.classList.add("card-title");
+    cardEl.appendChild(dateEl);
 
     var iconEl = document.createElement('img');
     iconEl.src = forecastIcon;
@@ -126,15 +140,18 @@ var displayForecast = function (){
 
     var tempEl = document.createElement('p');
     tempEl.textContent = 'Temp: ' + forecastTemp+ '°F';
-    forecastEl.appendChild(tempEl);
+    tempEl.classList.add("card-text");
+    cardEl.appendChild(tempEl);
 
     var humidityEl = document.createElement('p');
     humidityEl.textContent = 'Humidity: ' + forecastHumidity + '%';
-    forecastEl.appendChild(humidityEl);
+    humidityEl.classList.add("card-text");
+    cardEl.appendChild(humidityEl);
 
     var windEl = document.createElement('p');
     windEl.textContent = 'Wind Speed: ' + forecastWind + ' MPH';
-    forecastEl.appendChild(windEl);
+    windEl.classList.add("card-text");
+    cardEl.appendChild(windEl);
 }
 
 var getForecast = function(y, x){
@@ -191,7 +208,7 @@ var displaySearches = function (){
     $('#searchBar').append(
         $(document.createElement('input')).attr({
             type: 'button',
-            class: 'savedBtn',
+            class: 'savedBtn col-12',
             value: input,
         })
     );
@@ -205,7 +222,7 @@ function renderSearches(){
             $('#searchBar').append(
                 $(document.createElement('input')).attr({
                     type: 'button',
-                    class: 'savedBtn',
+                    class: 'savedBtn col-12',
                     value: storedSearches[i],
                 })
             );
