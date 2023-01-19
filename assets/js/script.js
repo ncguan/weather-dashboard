@@ -219,6 +219,11 @@ var displaySearches = function (){
             type: 'button',
             class: 'savedBtn col-12',
             value: input,
+        }).on('click', function () {
+            var index = $('.savedBtn').index(this);
+            var input = $('.savedBtn');
+            var value = input.eq(index).val();
+            getCoord(value);
         })
     );
 }
